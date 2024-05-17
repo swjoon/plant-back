@@ -1,5 +1,7 @@
 package com.project.plantcare.entity;
 
+import java.sql.Timestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +22,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SensorData {
 	
 	@Id
@@ -43,5 +47,5 @@ public class SensorData {
     private double shumidityV;
 
     @Column(name = "timestamp")
-    private java.sql.Timestamp timestamp;
+    private Timestamp timestamp;
 }

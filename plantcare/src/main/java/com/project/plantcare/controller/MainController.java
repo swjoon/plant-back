@@ -1,17 +1,22 @@
 package com.project.plantcare.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.plantcare.config.SecurityUtil;
 import com.project.plantcare.dto.DeviceDTO;
+import com.project.plantcare.dto.LedDTO;
+import com.project.plantcare.dto.SetDataDTO;
 import com.project.plantcare.entity.User;
 import com.project.plantcare.entity.UserDevice;
 import com.project.plantcare.service.DeviceService;
@@ -31,7 +36,6 @@ public class MainController {
 	public ResponseEntity<?> getuserdata() {
 		try {
 			Optional<User> user = userService.getUser(SecurityUtil.getCurrentUsername());
-
 			return ResponseEntity.ok(user.orElse(null));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -59,29 +63,55 @@ public class MainController {
 	
 	@GetMapping("/getDevice")
 	public ResponseEntity<List<UserDevice>> getDevice(){
-		
 		String userId = SecurityUtil.getCurrentUsername();
-		
-		List<UserDevice> deviceList = deviceService.getUserDevice(userId);
-				
+		List<UserDevice> deviceList = deviceService.getUserDevice(userId);	
 		if(deviceList.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
 		
-		return ResponseEntity.ok(deviceList);
-			
+		return ResponseEntity.ok(deviceList);		
+	}
+	
+	@PostMapping("/device")
+	public void deleteDevice(@RequestBody Map<String, String> requestBody) {
+		String userId = SecurityUtil.getCurrentUsername();
+		String deviceId = requestBody.get("deviceId");
+		System.out.println(userId);
+		System.out.println(" 들어온거임? " + deviceId);
+		deviceService.delete(userId, deviceId);
 	}
 	
 	@GetMapping("/getdevicedetail")
-	public ResponseEntity<?> getDeviceDetail(@RequestBody String deviceId){
-		
-		
-		
-		
-		
-		return ResponseEntity.ok(null);
+	public ResponseEntity<?> getDeviceDetail(@RequestParam String deviceId){
+		try{
+			SetDataDTO setDataDTO = deviceService.getSetData(deviceId);
+			return ResponseEntity.ok(setDataDTO);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("Invalid token");
+		}
 	}
 	
+	@PostMapping("/settingdata")
+	public ResponseEntity<?> updateSensorData(@RequestBody SetDataDTO setDataDTO){
+		try {
+			deviceService.updateData(setDataDTO);	
+			return ResponseEntity.ok(200);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("Invalid token");
+		}
+	}
 	
+	@PostMapping("/ledV")
+	public ResponseEntity<?> updateLedData(@RequestBody LedDTO ledDTO){
+		try {
+			deviceService.ledChange(ledDTO);
+			return ResponseEntity.ok(200);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.badRequest().body("Invalid token");
+		}
+	}
 
 }

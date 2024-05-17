@@ -40,17 +40,16 @@ public class UserController {
 		TokenDTO tokenDTO = userService.login(loginDTO);
 		ResponseCookie responseCookie = ResponseCookie.from("refresh_token", tokenDTO.getRefreshToken()).httpOnly(true)
 				.secure(true).sameSite("None").maxAge(tokenDTO.getDuration()).path("/").build();
-
-		TokenResponseDTO tokenResponseDTO = TokenResponseDTO.builder().isNewMember(false)
+		String nickName = userService.getNickName(loginDTO.getUserId());
+		String role = userService.getRole(loginDTO.getUserId());
+		TokenResponseDTO tokenResponseDTO = TokenResponseDTO.builder().isNewMember(false).nickName(nickName).role(role)
 				.accessToken(tokenDTO.getAccessToken()).refreshToken(tokenDTO.getRefreshToken()).build();
-
 		return ResponseEntity.ok().header("Set-Cookie", responseCookie.toString()).body(tokenResponseDTO);
 	}
 
 	// 회원가입
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
-
 		try {
 			userService.save(userDTO);
 			return ResponseEntity.ok("회원가입 완료");
@@ -66,7 +65,7 @@ public class UserController {
 		Optional<RefreshToken> tokenOptional = refreshTokenService.getRefreshToken(userId);
 		if (tokenOptional.isPresent()) {
 			RefreshToken token = tokenOptional.get();
-			System.out.println("token: " +token.getToken());
+			System.out.println("token: " + token.getToken());
 			if (refreshToken.equals(token.getToken())) {
 				refreshTokenService.deleteRefreshToken(refreshToken);
 			} else {
@@ -77,21 +76,20 @@ public class UserController {
 			throw new IllegalArgumentException("유효하지 않은 사용자 ID입니다.");
 		}
 	}
-	
+
 	@GetMapping("/userinfo")
-	public ResponseEntity<UserInfoDTO> getUserInfo(){
-		
+	public ResponseEntity<UserInfoDTO> getUserInfo() {
+
 		String userId = SecurityUtil.getCurrentUsername();
-		
+
 		System.out.println(userId);
-		
+
 		UserInfoDTO userInfoDTO = userService.getUserInfo(userId);
-		
+
 		System.out.println(userInfoDTO);
-		
+
 		return ResponseEntity.ok(userInfoDTO);
-		
+
 	}
-	
 
 }

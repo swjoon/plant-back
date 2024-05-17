@@ -48,7 +48,7 @@ public class SecurityConfig {
 				.accessDeniedHandler(jwtAccessDeniedHandler));
 		http.sessionManagement(a -> a.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		http.authorizeHttpRequests((auth) -> auth.requestMatchers("/", "/login", "/api/v1/user/**").permitAll()
+		http.authorizeHttpRequests((auth) -> auth.requestMatchers("/", "/login", "/api/v1/user/**","/api/v1/sensor/**").permitAll()
 				.anyRequest().authenticated());
 		
 		

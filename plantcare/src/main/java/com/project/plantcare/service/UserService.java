@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.project.plantcare.dto.LoginDTO;
 import com.project.plantcare.dto.TokenDTO;
@@ -77,6 +79,23 @@ public class UserService implements UserDetailsService {
 	public Optional<User> getUser(String userId) {
 		return userRepository.findByUserId(userId);
 	}
+	
+	public String getRole(String userId) {
+		Optional<User> optionalUser = userRepository.findById(userId);
+		User user = optionalUser.orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + userId));
+		String role = user.getRoles().toString().substring(5);
+		return role;
+	}
+	
+	public String getNickName(String userId) {
+		Optional<User> optionalUser = userRepository.findById(userId);
+		User user = optionalUser.orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found with id: " + userId));
+		String nickName = user.getNickname();
+		return nickName;
+	}
+	
 	
 	public UserInfoDTO getUserInfo(String userId) {
 		Optional<User> user = userRepository.findByUserId(userId);

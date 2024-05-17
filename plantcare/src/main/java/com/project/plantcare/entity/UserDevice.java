@@ -39,4 +39,8 @@ public class UserDevice {
 	public void setUserDeviceId(int userDeviceId) {
 		this.userDeviceId = userDeviceId;
 	}
+	
+	public void setUserDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
 }
