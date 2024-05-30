@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.plantcare.dto.SensorDataDTO;
+import com.project.plantcare.dto.SetDataDTO;
 import com.project.plantcare.service.DeviceService;
 
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/sensor")
 public class SensorController {
+	
 	private final DeviceService deviceService;
 	
 	@PostMapping("/postnowdata")
@@ -39,5 +41,11 @@ public class SensorController {
 			e.printStackTrace();
 			return ResponseEntity.badRequest().body("Invalid token");
 		}
+	}
+	
+	@GetMapping("/getsetdata")
+	public ResponseEntity<?> getdata(@RequestParam String deviceId){
+		SetDataDTO setDataDTO = deviceService.getSetData(deviceId);
+		return ResponseEntity.ok(setDataDTO);
 	}
 }

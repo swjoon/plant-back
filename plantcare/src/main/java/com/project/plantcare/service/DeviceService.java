@@ -8,11 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.project.plantcare.config.MqttConfig;
 import com.project.plantcare.dto.DeviceDTO;
 import com.project.plantcare.dto.LedDTO;
 import com.project.plantcare.dto.SensorDataDTO;
 import com.project.plantcare.dto.SetDataDTO;
-import com.project.plantcare.entity.Board;
 import com.project.plantcare.entity.Device;
 import com.project.plantcare.entity.SensorData;
 import com.project.plantcare.entity.SetData;
@@ -36,6 +36,7 @@ public class DeviceService {
 	private final UserDeviceRepository userDeviceRepository;
 	private final SetDataRepository setDataRepository;
 	private final SensorDataRepository sensorDataRepository;
+	private MqttConfig.MqttGateway mqttGateway;
 
 	// device 중복체크 및 사용 등록
 	public boolean deviceCheck(DeviceDTO deviceDTO) {
@@ -65,6 +66,7 @@ public class DeviceService {
 		userDeviceRepository.save(userDevice);
 
 	}
+
 	@Transactional
 	public void delete(String userId, String deviceId) {
 		Optional<Device> optionalDevice = deviceRepository.findById(deviceId);
@@ -110,6 +112,9 @@ public class DeviceService {
 		userDevice.setUserDeviceName(setDataDTO.getDeviceName());
 		setDataRepository.save(setData);
 		userDeviceRepository.save(userDevice);
+		// mqtt로 디바이스에게 신호 전달
+		String topic = "device/" + setDataDTO.getDeviceId() + "/setdata";
+		mqttGateway.sendToMqtt(setDataDTO.toString(), topic);
 	}
 
 	// 조명 on/off
@@ -127,6 +132,9 @@ public class DeviceService {
 		Optional<Device> optionalDevice = deviceRepository.findById(sensorDataDTO.getDeviceId());
 		if (optionalDevice.isPresent()) {
 			Device device = optionalDevice.get();
+			System.out.println(
+					sensorDataDTO.getLedV() + " " + sensorDataDTO.getTempV() + " " + sensorDataDTO.getHumidityV() + " "
+							+ sensorDataDTO.getShumidityV() + " " + sensorDataDTO.getTimestamp());
 			SensorData sensorData = SensorData.builder().device(device).ledV(sensorDataDTO.getLedV())
 					.tempV(sensorDataDTO.getTempV()).humidityV(sensorDataDTO.getHumidityV())
 					.shumidityV(sensorDataDTO.getShumidityV()).timestamp(sensorDataDTO.getTimestamp()).build();

@@ -1,5 +1,6 @@
 package com.project.plantcare.controller;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.plantcare.config.SecurityUtil;
+import com.project.plantcare.dto.ChangePwDTO;
+import com.project.plantcare.dto.FindPwDTO;
 import com.project.plantcare.dto.LoginDTO;
 import com.project.plantcare.dto.TokenDTO;
 import com.project.plantcare.dto.TokenResponseDTO;
@@ -51,6 +54,7 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@RequestBody UserDTO userDTO) {
 		try {
+			System.out.println(userDTO);
 			userService.save(userDTO);
 			return ResponseEntity.ok("회원가입 완료");
 		} catch (Exception e) {
@@ -58,6 +62,7 @@ public class UserController {
 		}
 	}
 
+	// 로그아웃
 	@PostMapping("/logout")
 	public void logout(@RequestBody String refreshToken) {
 		System.out.println("refreshtoken: " + refreshToken);
@@ -77,6 +82,7 @@ public class UserController {
 		}
 	}
 
+	// 유저정보 불러오기
 	@GetMapping("/userinfo")
 	public ResponseEntity<UserInfoDTO> getUserInfo() {
 
@@ -92,4 +98,35 @@ public class UserController {
 
 	}
 
+	// 비밀번호 찾기
+	@PostMapping("/findpw")
+	public ResponseEntity<?> findpw(@RequestBody FindPwDTO pwDTO) {
+		userService.checkUserInfo(pwDTO);
+		return ResponseEntity.ok("이메일 전송 완료");
+	}
+
+	// 비밀번호 수정
+	@PostMapping("/changepw")
+	public ResponseEntity<?> changePW(@RequestBody ChangePwDTO dto) {
+		String userId = SecurityUtil.getCurrentUsername();
+		userService.changePw(dto, userId);
+		return ResponseEntity.ok("비밀번호 변경 성공");
+	}
+
+	// 닉네임 수정
+	@PostMapping("/changenickname")
+	public ResponseEntity<?> changeNickName(@RequestBody Map<String, String> requestBody) {
+		String userId = SecurityUtil.getCurrentUsername();
+		String nickName = requestBody.get("nickName");
+		userService.changeNickName(userId, nickName);
+		return ResponseEntity.ok("비밀번호 변경 성공");
+	}
+	
+	// 회원탈퇴 
+	@PostMapping("/userdelete")
+	public ResponseEntity<?> userDelete() {
+		String userId = SecurityUtil.getCurrentUsername();
+		userService.deleteUser(userId);
+		return ResponseEntity.ok("회원탈퇴 완료");
+	}
 }

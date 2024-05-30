@@ -43,4 +43,11 @@ public class UserDevice {
 	public void setUserDeviceName(String deviceName) {
 		this.deviceName = deviceName;
 	}
+
+	@Override
+	public String toString() {
+		return "UserDevice [userDeviceId=" + userDeviceId + ", user=" + user + ", device=" + device + ", deviceName="
+				+ deviceName + "]";
+	}
+	
 }

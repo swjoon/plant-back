@@ -48,13 +48,13 @@ public class SecurityConfig {
 				.accessDeniedHandler(jwtAccessDeniedHandler));
 		http.sessionManagement(a -> a.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-		http.authorizeHttpRequests((auth) -> auth.requestMatchers("/", "/login", "/api/v1/user/**","/api/v1/sensor/**").permitAll()
-				.anyRequest().authenticated());
-		
+		http.authorizeHttpRequests((auth) -> auth
+				.requestMatchers("/", "/login", "/api/v1/user/login", "/api/v1/user/logout", "/api/v1/user/findpw","/api/v1/user/register","/api/v1/sensor/**")
+				.permitAll().anyRequest().authenticated());
 		
 		// jwt필터를 usernamepassword인증 전에 실행
 		http.addFilterBefore(new JwtRequestFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-		
+
 		log.info("securityConfig");
 		return http.build();
 	}

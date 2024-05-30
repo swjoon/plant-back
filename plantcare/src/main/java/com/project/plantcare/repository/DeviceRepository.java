@@ -7,5 +7,5 @@ import com.project.plantcare.entity.Device;
 
 @Repository
 public interface DeviceRepository extends JpaRepository<Device, String>{
-	
+
 }

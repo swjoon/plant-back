@@ -1,12 +1,9 @@
 package com.project.plantcare.service;
 
-import java.util.Optional;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.project.plantcare.dto.TokenDTO;
-import com.project.plantcare.dto.UserDTO;
 import com.project.plantcare.entity.RefreshToken;
 import com.project.plantcare.entity.User;
 import com.project.plantcare.jwt.JwtTokenProvider;

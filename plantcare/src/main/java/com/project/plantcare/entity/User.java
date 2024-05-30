@@ -67,4 +67,8 @@ public class User {
     public void updatePassword(String userPw) {
     	this.userPw = userPw;
     }
+    
+    public void updateNickName(String nickname) {
+    	this.nickname = nickname;
+    }
 }

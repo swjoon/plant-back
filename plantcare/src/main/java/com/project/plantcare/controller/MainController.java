@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +67,6 @@ public class MainController {
 		if(deviceList.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
-		
 		return ResponseEntity.ok(deviceList);		
 	}
 	
@@ -76,14 +74,13 @@ public class MainController {
 	public void deleteDevice(@RequestBody Map<String, String> requestBody) {
 		String userId = SecurityUtil.getCurrentUsername();
 		String deviceId = requestBody.get("deviceId");
-		System.out.println(userId);
-		System.out.println(" 들어온거임? " + deviceId);
 		deviceService.delete(userId, deviceId);
 	}
 	
 	@GetMapping("/getdevicedetail")
 	public ResponseEntity<?> getDeviceDetail(@RequestParam String deviceId){
 		try{
+			System.out.println("요기?");
 			SetDataDTO setDataDTO = deviceService.getSetData(deviceId);
 			return ResponseEntity.ok(setDataDTO);
 		}catch(Exception e) {
