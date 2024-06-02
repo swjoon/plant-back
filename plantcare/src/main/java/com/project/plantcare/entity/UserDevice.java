@@ -12,10 +12,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name ="User_Device")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
