@@ -95,6 +95,7 @@ public class MainController {
 	public ResponseEntity<?> updateSensorData(@RequestBody SetDataDTO setDataDTO){
 		try {
 			deviceService.updateData(setDataDTO);	
+			System.out.println("now deviceId : " + setDataDTO.getDeviceId() );
 			String topic = "device/" + setDataDTO.getDeviceId() + "/setdata";
 			mqttService.sendMessage(topic, "1");
 			return ResponseEntity.ok(200);

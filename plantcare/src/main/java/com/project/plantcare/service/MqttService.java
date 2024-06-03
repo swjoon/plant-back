@@ -16,6 +16,7 @@ public class MqttService {
 	}
 
 	public void sendMessage(String topic, String message) {
+		System.out.println("전송시도");
 		mqttGateway.sendToMqtt(message, topic);
 	}
 }
