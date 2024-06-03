@@ -96,7 +96,7 @@ public class MainController {
 		try {
 			deviceService.updateData(setDataDTO);	
 			String topic = "device/" + setDataDTO.getDeviceId() + "/setdata";
-			mqttService.sendMessage(topic, setDataDTO.toString());
+			mqttService.sendMessage(topic, "1");
 			return ResponseEntity.ok(200);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -108,6 +108,8 @@ public class MainController {
 	public ResponseEntity<?> updateLedData(@RequestBody LedDTO ledDTO){
 		try {
 			deviceService.ledChange(ledDTO);
+			String topic = "device/" + ledDTO.getDeviceId() + "/setdata";
+			mqttService.sendMessage(topic, "2");
 			return ResponseEntity.ok(200);
 		}catch(Exception e) {
 			e.printStackTrace();
