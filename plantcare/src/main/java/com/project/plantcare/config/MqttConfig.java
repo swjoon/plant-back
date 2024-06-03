@@ -17,7 +17,7 @@ import org.springframework.messaging.handler.annotation.Header;
 
 @Configuration
 public class MqttConfig {
-
+	
 	@Bean
 	public MqttPahoClientFactory mqttClientFactory() {
 		DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
