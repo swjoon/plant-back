@@ -19,6 +19,7 @@ import com.project.plantcare.dto.SetDataDTO;
 import com.project.plantcare.entity.User;
 import com.project.plantcare.entity.UserDevice;
 import com.project.plantcare.service.DeviceService;
+import com.project.plantcare.service.MqttService;
 import com.project.plantcare.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class MainController {
 
 	private final DeviceService deviceService;
 	private final UserService userService;
+	private final MqttService mqttService;
 
 	@GetMapping("/home")
 	public ResponseEntity<?> getuserdata() {
@@ -93,6 +95,8 @@ public class MainController {
 	public ResponseEntity<?> updateSensorData(@RequestBody SetDataDTO setDataDTO){
 		try {
 			deviceService.updateData(setDataDTO);	
+			String topic = "device/" + setDataDTO.getDeviceId() + "/setdata";
+			mqttService.sendMessage(topic, setDataDTO.toString());
 			return ResponseEntity.ok(200);
 		}catch(Exception e) {
 			e.printStackTrace();

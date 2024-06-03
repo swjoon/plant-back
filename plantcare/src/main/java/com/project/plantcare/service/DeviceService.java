@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.project.plantcare.config.MqttConfig;
 import com.project.plantcare.dto.DeviceDTO;
 import com.project.plantcare.dto.LedDTO;
 import com.project.plantcare.dto.SensorDataDTO;
@@ -36,7 +35,6 @@ public class DeviceService {
 	private final UserDeviceRepository userDeviceRepository;
 	private final SetDataRepository setDataRepository;
 	private final SensorDataRepository sensorDataRepository;
-	private MqttConfig.MqttGateway mqttGateway;
 
 	// device 중복체크 및 사용 등록
 	public boolean deviceCheck(DeviceDTO deviceDTO) {
@@ -112,9 +110,6 @@ public class DeviceService {
 		userDevice.setUserDeviceName(setDataDTO.getDeviceName());
 		setDataRepository.save(setData);
 		userDeviceRepository.save(userDevice);
-		// mqtt로 디바이스에게 신호 전달
-		String topic = "device/" + setDataDTO.getDeviceId() + "/setdata";
-		mqttGateway.sendToMqtt(setDataDTO.toString(), topic);
 	}
 
 	// 조명 on/off

@@ -22,7 +22,8 @@ public class MqttConfig {
 	public MqttPahoClientFactory mqttClientFactory() {
 		DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
 		MqttConnectOptions options = new MqttConnectOptions();
-		options.setServerURIs(new String[] { "tcp://43.200.176.203:1883" }); // 설정
+		options.setServerURIs(new String[] { "tcp://3.35.3.69:1883" }); // 설정
+//		options.setServerURIs(new String[] { "tcp://localhost:1883" }); // 설정
 		factory.setConnectionOptions(options);
 		return factory;
 	}
