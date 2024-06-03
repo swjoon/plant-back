@@ -8,9 +8,13 @@ import com.project.plantcare.config.MqttConfig;
 @Service
 public class MqttService {
 	
-	@Autowired
-	private MqttConfig.MqttGateway mqttGateway;
+	private final MqttConfig.MqttGateway mqttGateway;
 	
+    @Autowired
+    public MqttService(MqttConfig.MqttGateway mqttGateway) {
+        this.mqttGateway = mqttGateway;
+    }
+    
 	public void sendMessage(String topic, String message) {
 		mqttGateway.sendToMqtt(message, topic);
 	}
