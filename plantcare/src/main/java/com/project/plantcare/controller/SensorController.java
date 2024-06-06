@@ -44,8 +44,15 @@ public class SensorController {
 	}
 	
 	@GetMapping("/getsetdata")
-	public ResponseEntity<?> getdata(@RequestParam String deviceId){
+	public ResponseEntity<?> getData(@RequestParam String deviceId){
 		SetDataDTO setDataDTO = deviceService.getSetData(deviceId);
 		return ResponseEntity.ok(setDataDTO);
+	}
+	
+	@GetMapping("/getled")
+	public ResponseEntity<?> getLed(@RequestParam String deviceId){
+		SetDataDTO setDataDTO = deviceService.getSetData(deviceId);
+		int led = setDataDTO.getLedV();
+		return ResponseEntity.ok(led);
 	}
 }

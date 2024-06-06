@@ -82,7 +82,6 @@ public class MainController {
 	@GetMapping("/getdevicedetail")
 	public ResponseEntity<?> getDeviceDetail(@RequestParam String deviceId){
 		try{
-			System.out.println("요기?");
 			SetDataDTO setDataDTO = deviceService.getSetData(deviceId);
 			return ResponseEntity.ok(setDataDTO);
 		}catch(Exception e) {
@@ -93,29 +92,18 @@ public class MainController {
 	
 	@PostMapping("/settingdata")
 	public ResponseEntity<?> updateSensorData(@RequestBody SetDataDTO setDataDTO){
-		try {
 			deviceService.updateData(setDataDTO);	
-			System.out.println("now deviceId : " + setDataDTO.getDeviceId() );
 			String topic = "device/" + setDataDTO.getDeviceId() + "/setdata";
 			mqttService.sendMessage(topic, "1");
 			return ResponseEntity.ok(200);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body("Invalid token");
-		}
 	}
 	
 	@PostMapping("/ledV")
 	public ResponseEntity<?> updateLedData(@RequestBody LedDTO ledDTO){
-		try {
 			deviceService.ledChange(ledDTO);
 			String topic = "device/" + ledDTO.getDeviceId() + "/setdata";
 			mqttService.sendMessage(topic, "2");
 			return ResponseEntity.ok(200);
-		}catch(Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.badRequest().body("Invalid token");
-		}
 	}
 
 }
