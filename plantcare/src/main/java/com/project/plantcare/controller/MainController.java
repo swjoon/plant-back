@@ -102,7 +102,7 @@ public class MainController {
 	public ResponseEntity<?> updateLedData(@RequestBody LedDTO ledDTO){
 			deviceService.ledChange(ledDTO);
 			String topic = "device/" + ledDTO.getDeviceId() + "/setdata";
-			mqttService.sendMessage(topic, "2");
+			mqttService.sendMessage(topic, "1");
 			return ResponseEntity.ok(200);
 	}
 
